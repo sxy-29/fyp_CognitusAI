@@ -1,6 +1,8 @@
-import { Database } from "lucide-react";
 import { useState } from "react";
 import DatabaseConnectorModel from "../components/DatabaseConnector";
+import postgreLogo from "../assets/Postgres_logo.webp";
+import mysqlLogo from "../assets/mysql_logo.webp"
+import supabaseLogo from "../assets/supabase-logo.webp";
 
 function DataConnectorsPage() {
   const [open, setOpen] = useState(false);
@@ -10,17 +12,17 @@ function DataConnectorsPage() {
     {
       name: "MySQL",
       description: "Connect your MySQL database for direct querying and analysis",
-      icon: Database
+      icon: mysqlLogo
     },
     {
       name: "PostgreSQL",
       description: "Analyze your PostgreSQL database tables and schemas",
-      icon: Database
+      icon: postgreLogo
     },
     {
       name: "Supabase",
       description: "Connect your Supabase database for direct querying and analysis",
-      icon: Database
+      icon: supabaseLogo
     }
   ]
 
@@ -46,7 +48,7 @@ function DataConnectorsPage() {
         {connectors.map((connector, index) => (
           <div key={index} className="bg-white border border-gray-200 rounded-lg shadow-sm p-6 hover:shadow-md transition flex flex-col justify-between">
             <div>
-              <connector.icon className="w-10 h-10 text-text-muted-light mb-4" />
+              <img src={connector.icon} alt={`${connector.name} logo`} className="w-10 h-10 object-contain mb-4" />
               <h4 className="font-semibold text-text-title-light">{connector.name}</h4>
               <p className="text-sm text-text-desc-light mt-2">
                 {connector.description}
