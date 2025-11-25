@@ -6,6 +6,7 @@ import FormField from "./FormField";
 import postgreLogo from "../assets/Postgres_logo.webp";
 import mysqlLogo from "../assets/mysql_logo.webp"
 import supabaseLogo from "../assets/supabase-logo.webp";
+import getTooltips from "./ConnectionTooltips";
 
 type Props = {
     open: boolean;
@@ -18,11 +19,17 @@ function DatabaseConnectorModel({ open, onClose, type, onConnect }: Props) {
     const [form, setForm] = useState<Record<string, string>>({});
     const [connectType, setConnectType] = useState<"direct" | "ssh">("direct");
 
+    // Update the information when input being focus
+    const [fieldFocused, setFocusField] = useState<string>('');
+    const [tooltips, setTooltips] = useState<string>('');
+
     // Reset form when modal is closed
     useEffect(() => {
         if (!open) {
             setForm({});
             setConnectType("direct");
+            setFocusField('');
+            setTooltips('');
         }
     }, [open]);
 
@@ -70,15 +77,24 @@ function DatabaseConnectorModel({ open, onClose, type, onConnect }: Props) {
 
     return (
         <Dialog open={open} onOpenChange={onClose}>
-            <DialogContent className="max-h-[80vh] flex flex-col">
+            <DialogContent className="max-w-lg sm:max-w-[800px] w-full max-h-[80vh] flex flex-col p-6">
                 <DialogHeader>
-                    <DialogTitle>
+                    <DialogTitle className="text-lg font-semibold">
                         Create {type} Connector
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="flex gap-6 mt-4 flex-1 overflow-y-auto">
-                    <div className=" pr-2 space-y-4 mt-2">
+                <div
+                    className="flex flex-col gap-2 flex-1 grid grid-cols-1 md:grid-cols-2 overflow-y-auto"
+                    onClick={(e) => {
+                        // Only clear if user DID NOT click inside input/select
+                        if (!(e.target as HTMLElement).closest("input")) {
+                            setFocusField("");
+                            setTooltips("");
+                        }
+                    }}
+                >
+                    <div className=" space-y-4 ">
                         {type !== "Supabase" && (
                             <FormField
                                 label="Mode"
@@ -89,6 +105,10 @@ function DatabaseConnectorModel({ open, onClose, type, onConnect }: Props) {
                                     { label: "Direct", value: "direct" },
                                     { label: "SSH", value: "ssh" },
                                 ]}
+                                onFocus={() => {
+                                    setFocusField("");
+                                    setTooltips("");
+                                }}
                             />
                         )}
 
@@ -101,6 +121,10 @@ function DatabaseConnectorModel({ open, onClose, type, onConnect }: Props) {
                                 value={form[field.key] || ""}
                                 onChange={(val) => handleChange(field.key, val)}
                                 required
+                                onFocus={() => {
+                                    setFocusField(field.label);
+                                    setTooltips(getTooltips({ type, field: showSSH && field.key !== "connectionName" ? field.key + "_ssh" : field.key }));
+                                }}
                             />
                         ))}
 
@@ -114,34 +138,47 @@ function DatabaseConnectorModel({ open, onClose, type, onConnect }: Props) {
                                         value={form[field.key] || ""}
                                         onChange={(val) => handleChange(field.key, val)}
                                         required
+                                        onFocus={() => {
+                                            setFocusField(field.label);
+                                            setTooltips(getTooltips({ type, field: field.key }));
+                                        }}
                                     />
                                 ))}
                             </>
                         )}
                     </div>
 
-                    <div className="ml-6 p-4 bg-gray-50 rounded-md text-sm text-gray-700 flex-1">
-                        <div className="flex justify-center items-center flex-col mb-4">
-                            <img src={icon} alt={`${type} logo`} className="w-10 h-10 object-contain mb-4" />
-                            <h4 className="font-semibold text-text-title-light">{form["connectionName"] || type}</h4>
+                    <div className="w-full bg-gray-50 rounded-xl p-4 text-sm text-gray-700 flex flex-col space-y-6">
+                        <div className="flex flex-col justify-center items-center mb-6">
+                            <img src={icon} alt={`${type} logo`} className="w-12 h-12 object-contain mb-3" />
+                            <h4 className="font-semibold text-text-title-light text-base">
+                                {form["connectionName"] || type}
+                            </h4>
                         </div>
 
-                        <div>
-                            <p>Data Connectors allows you to connect to data sources like {type} by securely providing your credentials to the AI.</p>
-                            <p>Once a connector is enabled, it is available for the entire chat, allowing the AI to access and query your data contextually across interactions.</p>
-                        </div>
+                        {(tooltips != '') ? (
+                            <div className="rounded-lg border border-border p-4 shadow-sm">
+                                <p className="font-semibold text-base mb-2">{fieldFocused}</p>
+                                <p className="leading-relaxed text-sm">{tooltips}</p>
+                            </div>
+                        ) : (
+                            <>
+                                <p className="leading-relaxed mb-3">
+                                    Data Connectors allows you to connect to data sources like {type} by securely providing your credentials to the AI.
+                                </p>
+                                <p className="leading-relaxed mb-3">
+                                    Once a connector is enabled, it is available for the entire chat, allowing the AI to access and query your data contextually across interactions.
+                                </p>
+                            </>
+                        )}
                     </div>
                 </div>
 
-                <DialogFooter>
-                    <Button
-                        className="w-full mt-4"
-                        onClick={() => onConnect(form)}
-                    >
+                <DialogFooter className="pt-4">
+                    <Button className="w-full" onClick={() => onConnect(form)}>
                         Connect
                     </Button>
                 </DialogFooter>
-
             </DialogContent>
         </Dialog>
     );

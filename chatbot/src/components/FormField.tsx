@@ -9,6 +9,7 @@ type FieldProps = {
     value?: string;
     onChange?: (value: string) => void;
     required?: boolean;
+    onFocus?: () => void;
 
     /** For Select type fields */
     options?: { label: string; value: string }[];
@@ -24,24 +25,27 @@ function FormField({
     onChange,
     required,
     component = "input",
+    onFocus
 }: FieldProps) {
     return (
         <div className="w-full">
             <Label className="form-label mb-2">{label}{required && " *"}</Label>
 
             {component === "select" ? (
-                <Select value={value} onValueChange={(val) => onChange?.(val)}>
-                    <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select option" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {options?.map((opt) => (
-                            <SelectItem key={opt.value} value={opt.value}>
-                                {opt.label}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                <div onFocus={onFocus}>
+                    <Select value={value} onValueChange={(val) => onChange?.(val)}>
+                        <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select option" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {options?.map((opt) => (
+                                <SelectItem key={opt.value} value={opt.value}>
+                                    {opt.label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                </div>
             ) : (
                 <Input
                     className="w-full"
@@ -50,6 +54,7 @@ function FormField({
                     value={value}
                     onChange={(e) => onChange?.(e.target.value)}
                     required={required}
+                    onFocus={onFocus}
                 />
             )}
         </div>
