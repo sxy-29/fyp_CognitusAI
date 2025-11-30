@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router';
-import DataConnectorsPage from './pages/DataConnectors';
+import DataConnectorsPage from './pages/DataConnectorsPage';
 import ChatsPage from './pages/chats/ChatsPage';
 import NotebooksPage from './pages/NotebooksPage';
 import FilesPage from './pages/FilesPage';

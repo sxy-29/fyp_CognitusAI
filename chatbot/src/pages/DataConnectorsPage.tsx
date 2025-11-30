@@ -1,14 +1,10 @@
 import { useState } from "react";
-import DatabaseConnectorModel from "../components/DatabaseConnector";
+import DatabaseConnectorModel from "../components/DatabaseConnectorModel";
 import postgreLogo from "../assets/Postgres_logo.webp";
 import mysqlLogo from "../assets/mysql_logo.webp"
 import supabaseLogo from "../assets/supabase-logo.webp";
 
-function DataConnectorsPage() {
-  const [open, setOpen] = useState(false);
-  const [selectedType, setSelectedType] = useState<"MySQL" | "PostgreSQL" | "Supabase">("MySQL");
-
-  const connectors = [
+export const connectors = [
     {
       name: "MySQL",
       description: "Connect your MySQL database for direct querying and analysis",
@@ -25,6 +21,10 @@ function DataConnectorsPage() {
       icon: supabaseLogo
     }
   ]
+
+function DataConnectorsPage() {
+  const [open, setOpen] = useState(false);
+  const [selectedType, setSelectedType] = useState<"MySQL" | "PostgreSQL" | "Supabase">("MySQL");
 
   // temp
   const handleConnect = (data: Record<string, string>) => {

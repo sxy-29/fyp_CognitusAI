@@ -6,6 +6,10 @@ type FieldProps = {
     label: string;
     type?: string;
     placeholder?: string;
+    // RHF register (for input)
+    register?: any;
+    error?: string;
+
     value?: string;
     onChange?: (value: string) => void;
     required?: boolean;
@@ -20,12 +24,14 @@ function FormField({
     label,
     type = "text",
     placeholder = "Enter your " + label.toLowerCase(),
+    register,
+    error,
     value = "",
-    options,
     onChange,
     required,
-    component = "input",
-    onFocus
+    onFocus,
+    options,
+    component = "input"
 }: FieldProps) {
     return (
         <div className="w-full">
@@ -33,7 +39,7 @@ function FormField({
 
             {component === "select" ? (
                 <div onFocus={onFocus}>
-                    <Select value={value} onValueChange={(val) => onChange?.(val)}>
+                    <Select value={value} onValueChange={onChange}>
                         <SelectTrigger className="w-full">
                             <SelectValue placeholder="Select option" />
                         </SelectTrigger>
@@ -48,14 +54,17 @@ function FormField({
                 </div>
             ) : (
                 <Input
-                    className="w-full"
+                    className={`w-full ${error ? "border-red-500" : ""}`}
                     type={type}
                     placeholder={placeholder}
-                    value={value}
-                    onChange={(e) => onChange?.(e.target.value)}
-                    required={required}
+                    {...register}
                     onFocus={onFocus}
                 />
+            )}
+            {error && (
+                <p className="text-red-600 text-sm mt-1">
+                    {error}
+                </p>
             )}
         </div>
     );
