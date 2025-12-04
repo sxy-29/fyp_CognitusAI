@@ -1,7 +1,7 @@
 import { Settings } from 'lucide-react';
 import './App.css'
 import AppRoutes from './AppRoutes';
-import AppSidebar from './components/AppSidebar';
+import AppSidebar from './AppSidebar';
 import { Button } from './components/ui/button';
 import { SidebarInset, SidebarProvider } from './components/ui/sidebar';
 

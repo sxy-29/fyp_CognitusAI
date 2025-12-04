@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "./ui/dialog";
-import { Button } from "./ui/button";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "../../components/ui/dialog";
+import { Button } from "../../components/ui/button";
 import { useForm  } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 
 import FormField from "./FormField";
 import getTooltips from "./ConnectionTooltips";
-import { connectors } from "@/pages/DataConnectorsPage";
+import { connectors } from "@/pages/dataConnector/DataConnectorsPage";
 
 type Props = {
     open: boolean;

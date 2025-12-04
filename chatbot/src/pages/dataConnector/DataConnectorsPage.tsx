@@ -1,8 +1,8 @@
 import { useState } from "react";
-import DatabaseConnectorModel from "../components/DatabaseConnectorModel";
-import postgreLogo from "../assets/Postgres_logo.webp";
-import mysqlLogo from "../assets/mysql_logo.webp"
-import supabaseLogo from "../assets/supabase-logo.webp";
+import DatabaseConnectorModel from "./DatabaseConnectorModel"
+import postgreLogo from "../../assets/Postgres_logo.webp";
+import mysqlLogo from "../../assets/mysql_logo.webp"
+import supabaseLogo from "../../assets/supabase-logo.webp"
 
 export const connectors = [
     {

@@ -11,7 +11,7 @@ import {
     SidebarRail,
     SidebarTrigger,
     useSidebar,
-} from "./ui/sidebar";
+} from "./components/ui/sidebar";
 import { MessageSquare, BookOpen, Folder, Link as LinkIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
