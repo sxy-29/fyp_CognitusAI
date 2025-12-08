@@ -2,7 +2,7 @@
 
 import { useLocation } from 'react-router';
 import { useChat } from '@ai-sdk/react';
-import type { UIMessage } from "ai";
+import { DefaultChatTransport, type UIMessage } from "ai";
 import { Conversation } from '@/components/ai-elements/conversation';
 import { PromptInputProvider } from '@/components/ai-elements/prompt-input';
 import { useState } from 'react';
@@ -65,8 +65,13 @@ Simple Table:
     }
   ];
 
-  const { messages, setMessages, status } = useChat({
-    messages: initialMessages
+  // status: pending to be used for the streaming
+  // sendMessage: function to send message (api call)
+  const { messages, setMessages, status, sendMessage } = useChat({
+    // messages: initialMessages,
+    // transport: new DefaultChatTransport({
+    //   api: '/api/ai/chat'
+    // }),
   });
 
   // handle the files sent from FilesPage
@@ -76,13 +81,34 @@ Simple Table:
 
   return (
     <div className="flex flex-col h-full">
-      <Conversation>
-        <ChatMessages chatMessages={messages} />
-      </Conversation>
+      {messages.length > 0 ?
+        (
+          <>
+            <Conversation>
+              <ChatMessages chatMessages={messages} />
+            </Conversation>
+          </>
+        ) : (
+          <div className="flex-1 flex items-center justify-center">
+            <div className="w-full max-w-4xl text-center px-8">
+              <h2 className="text-4xl font-bold text-text-title-light">
+                What insights would you like to explore today?
+              </h2>
 
-      <PromptInputProvider>
-        <ChatInput chatMessages={messages} setChatMessages={setMessages} files={fileState} />
-      </PromptInputProvider>
+              <div className='mt-4'>
+                <PromptInputProvider>
+                  <ChatInput chatMessages={messages} setChatMessages={setMessages} files={fileState} />
+                </PromptInputProvider>
+              </div>
+            </div>
+          </div>
+        )}
+
+      {messages.length > 0 && (
+        <PromptInputProvider>
+          <ChatInput chatMessages={messages} setChatMessages={setMessages} files={fileState} />
+        </PromptInputProvider>
+      )}
     </div>
   );
 }
