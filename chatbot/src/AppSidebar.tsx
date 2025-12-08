@@ -42,7 +42,9 @@ function AppSidebar() {
             url: "/dataConnectors",
         },
     ];
+
     const expanded = state === "expanded";
+    
     return (
         <Sidebar collapsible="icon">
             <SidebarHeader

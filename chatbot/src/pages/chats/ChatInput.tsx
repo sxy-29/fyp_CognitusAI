@@ -1,17 +1,19 @@
-import { useRef, useState } from "react";
-import { SendHorizontal} from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { SendHorizontal } from "lucide-react";
 import type { UIMessage } from "ai";
-import { 
-    PromptInput, 
-    PromptInputActionAddAttachments, 
-    PromptInputAttachment, 
-    PromptInputAttachments, 
-    PromptInputBody, 
-    PromptInputFooter, 
-    PromptInputHeader, 
-    PromptInputSubmit, 
-    PromptInputTextarea, 
-    PromptInputTools 
+import {
+    PromptInput,
+    PromptInputActionAddAttachments,
+    PromptInputAttachment,
+    PromptInputAttachments,
+    PromptInputBody,
+    PromptInputFooter,
+    PromptInputHeader,
+    PromptInputSubmit,
+    PromptInputTextarea,
+    PromptInputTools,
+    usePromptInputController,
+    type PromptInputMessage
 } from "@/components/ai-elements/prompt-input";
 
 interface ChatInputProps {
@@ -22,19 +24,38 @@ interface ChatInputProps {
 
 function ChatInput({ chatMessages, setChatMessages, files }: ChatInputProps) {
     const [inputText, setInputText] = useState<string>('');
+    const promptController = usePromptInputController();
+    const initialisedRef = useRef(false);
 
-    const [uploadedFiles, setUploadedFiles] = useState<File[]>(files ?? []);
-    const fileInputRef = useRef<HTMLInputElement>(null);
+    useEffect(() => {
+        if (files && files.length > 0 && !initialisedRef.current) {
+            promptController.attachments.add(files as any);
+            initialisedRef.current = true;
+        }
+    }, [files, promptController.attachments]);
 
-    function sendMessage(): void {
-        if (inputText.trim() === '') return;
+    function sendMessage(message: PromptInputMessage) {
+        const hasText = Boolean(message.text);
+        const hasAttachments = Boolean(message.files?.length);
+
+        if (!(hasText || hasAttachments)) {
+            return;
+        }
+
+        const userParts: UIMessage["parts"] = [];
+        if (hasText) {
+            userParts.push({ type: 'text', text: message.text });
+        }
+        if (hasAttachments) {
+            userParts.push(...message.files!)
+        }
 
         const newChatMessages: UIMessage[] = [
             ...chatMessages,
             {
                 id: chatMessages.length.toString(),
                 role: 'user',
-                parts: [{ type: 'text', text: inputText }]
+                parts: userParts
             }
         ];
 
@@ -75,7 +96,7 @@ function ChatInput({ chatMessages, setChatMessages, files }: ChatInputProps) {
                         <PromptInputActionAddAttachments />
                     </PromptInputTools>
 
-                    <PromptInputSubmit disabled={inputText.trim() === ''}>
+                    <PromptInputSubmit disabled={!inputText.trim()}>
                         <SendHorizontal />
                     </PromptInputSubmit>
                 </PromptInputFooter>

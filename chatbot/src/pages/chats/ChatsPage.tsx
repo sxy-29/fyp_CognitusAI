@@ -3,9 +3,11 @@
 import { useLocation } from 'react-router';
 import { useChat } from '@ai-sdk/react';
 import type { UIMessage } from "ai";
+import { Conversation } from '@/components/ai-elements/conversation';
+import { PromptInputProvider } from '@/components/ai-elements/prompt-input';
+import { useState } from 'react';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
-import { Conversation } from '@/components/ai-elements/conversation';
 
 function ChatsPage() {
   const initialMessages: UIMessage[] = [
@@ -69,7 +71,8 @@ Simple Table:
 
   // handle the files sent from FilesPage
   const location = useLocation();
-  const fileState = location.state?.files ?? [];
+  // const fileState = location.state?.files ?? [];
+  const [fileState] = useState(() => location.state?.files ?? []);
 
   return (
     <div className="flex flex-col h-full">
@@ -77,7 +80,9 @@ Simple Table:
         <ChatMessages chatMessages={messages} />
       </Conversation>
 
-      <ChatInput chatMessages={messages} setChatMessages={setMessages} files={fileState} />
+      <PromptInputProvider>
+        <ChatInput chatMessages={messages} setChatMessages={setMessages} files={fileState} />
+      </PromptInputProvider>
     </div>
   );
 }

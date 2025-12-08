@@ -1,15 +1,24 @@
 import { ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
 import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
-
 import type { UIMessage } from "ai";
-import ExpandedCodeBlock from "./ExpandedCodeBlock";
 import { useEffect } from "react";
 import { useStickToBottomContext } from "use-stick-to-bottom";
+import ExpandedCodeBlock from "./ExpandedCodeBlock";
 
 function ChatMessages({ chatMessages }: { chatMessages: UIMessage[] }) {
+    const { scrollToBottom } = useStickToBottomContext();
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            scrollToBottom();
+        }, 30);
+
+        return () => clearTimeout(timer);
+    }, [chatMessages]);
+
     function handleText(text: string) {
         const segments = [];
-        const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g;
+        const codeBlockRegex = /```(\w+)?\n([\s\S]*?)```/g; // Regex to match code blocks
 
         let lastIndex = 0;
         let match;
@@ -55,16 +64,6 @@ function ChatMessages({ chatMessages }: { chatMessages: UIMessage[] }) {
 - Print the first few rows of the DataFrame
 - Print a descriptive summary of the DataFrame`
 
-    const { scrollToBottom } = useStickToBottomContext();
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            scrollToBottom();
-        }, 30);
-
-        return () => clearTimeout(timer);
-    }, [chatMessages]);
-
-
     return (
         <>
             <ConversationContent>
@@ -95,8 +94,14 @@ function ChatMessages({ chatMessages }: { chatMessages: UIMessage[] }) {
                                                     />
                                                 );
                                             }
-
                                         });
+
+                                    case "file":
+                                        return (
+                                            <MessageResponse key={`${chatMessage.id}-${i}`}>
+                                                {part.filename}
+                                            </MessageResponse>
+                                        )
                                     default:
                                         return null;
                                 }

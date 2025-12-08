@@ -154,7 +154,7 @@ export const ToolOutput = ({
   } else if (typeof output === "string") {
     // Output = <CodeBlock code={output} language="json" />;
     Output = (
-      <div className="overflow-hidden text-sm text-muted-foreground transition-all duration-300 ease-in-out whitespace-pre-wrap ">
+      <div className="overflow-hidden text-sm text-gray-700 transition-all duration-300 ease-in-out whitespace-pre-wrap ">
         {output}
       </div>
     );

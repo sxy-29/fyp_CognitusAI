@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router";
 import { Search, Download, Trash, MessagesSquare, UploadCloud, Slash } from "lucide-react";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
@@ -7,7 +8,6 @@ import { Checkbox } from "../components/ui/checkbox";
 // download file
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
-import { useNavigate } from "react-router";
 
 type UploadedFile = {
   id: string;
@@ -160,11 +160,11 @@ function FilesPage() {
         </div>
 
         <div className="flex space-x-3">
-          <Button variant="outline" className="flex gap-2" onClick={downloadSelected}>
+          <Button variant="outline" className="flex gap-2" onClick={downloadSelected} disabled={Object.values(selected).every(v => !v)}>
             <Download className="w-4 h-4" /> Download
           </Button>
 
-          <Button variant="outline" className="flex gap-2" onClick={deleteSelected}>
+          <Button variant="outline" className="flex gap-2" onClick={deleteSelected} disabled={Object.values(selected).every(v => !v)}>
             <Trash className="w-4 h-4" /> Delete
           </Button>
 

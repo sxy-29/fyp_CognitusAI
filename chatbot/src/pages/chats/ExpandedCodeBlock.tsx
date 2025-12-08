@@ -16,7 +16,7 @@ type CodeBlockProps = {
 
 function ExpandedCodeBlock({ title, code, language, codeExplanation, errorText }: CodeBlockProps) {
     return (
-        <Tool defaultOpen={true} className='bg-muted/100'>
+        <Tool defaultOpen={true} className='bg-muted/100 border-black-200 border-1 rounded-xl'>
             <ToolHeader title={title} />
             <ToolContent>
                 <ToolInput input={code} languages={programmingLanguages.find(lang => lang.name.toLowerCase() === language.toLowerCase())} />
