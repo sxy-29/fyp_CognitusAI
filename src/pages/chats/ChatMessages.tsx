@@ -1,5 +1,5 @@
 import { ConversationContent, ConversationScrollButton } from "@/components/ai-elements/conversation";
-import { Message, MessageContent, MessageResponse } from "@/components/ai-elements/message";
+import { Message, MessageAttachment, MessageAttachments, MessageContent, MessageResponse } from "@/components/ai-elements/message";
 import type { UIMessage } from "ai";
 import { useEffect } from "react";
 import { useStickToBottomContext } from "use-stick-to-bottom";
@@ -69,6 +69,15 @@ function ChatMessages({ chatMessages }: { chatMessages: UIMessage[] }) {
             <ConversationContent>
                 {chatMessages.map((chatMessage, index) => (
                     <Message key={index} from={chatMessage.role} >
+                        <div className="ml-auto flex w-fit flex-wrap gap-2 ">
+                            {chatMessage.parts
+                                ?.filter(p => p.type === "file")
+                                .map((filePart, idx) => (
+                                    <MessageAttachments key={idx}>
+                                        <MessageAttachment data={filePart} />
+                                    </MessageAttachments>
+                                ))}
+                        </div>
                         <MessageContent>
                             {chatMessage.parts?.map((part, i) => {
                                 switch (part.type) {
@@ -95,13 +104,6 @@ function ChatMessages({ chatMessages }: { chatMessages: UIMessage[] }) {
                                                 );
                                             }
                                         });
-
-                                    case "file":
-                                        return (
-                                            <MessageResponse key={`${chatMessage.id}-${i}`}>
-                                                {part.filename}
-                                            </MessageResponse>
-                                        )
                                     default:
                                         return null;
                                 }

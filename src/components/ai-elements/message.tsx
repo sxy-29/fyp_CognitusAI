@@ -337,16 +337,19 @@ export function MessageAttachment({
   onRemove,
   ...props
 }: MessageAttachmentProps) {
-  const filename = data.filename || "";
-  const mediaType =
-    data.mediaType?.startsWith("image/") && data.url ? "image" : "file";
-  const isImage = mediaType === "image";
-  const attachmentLabel = filename || (isImage ? "Image" : "Attachment");
+  const filename = data.filename || "attachment";
+  // const mediaType =
+  //   data.mediaType?.startsWith("image/") && data.url ? "image" : "file";
+  // const isImage = mediaType === "image";
+  // const attachmentLabel = filename || (isImage ? "Image" : "Attachment");
+  const mediaType = data.mediaType || "";
+  const url = data.url;
+  const isImage = mediaType.startsWith("image/") && url;
 
   return (
     <div
       className={cn(
-        "group relative size-24 overflow-hidden rounded-lg",
+        "group relative overflow-hidden rounded-lg",
         className
       )}
       {...props}
@@ -355,9 +358,9 @@ export function MessageAttachment({
         <>
           <img
             alt={filename || "attachment"}
-            className="size-full object-cover"
+            className="max-w-full h-auto rounded-lg"
             height={100}
-            src={data.url}
+            src={url}
             width={100}
           />
           {onRemove && (
@@ -377,15 +380,27 @@ export function MessageAttachment({
           )}
         </>
       ) : (
-        <>
+        <div className="flex flex-wrap gap-3">
           <Tooltip>
             <TooltipTrigger asChild>
-              <div className="flex size-full shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
-                <PaperclipIcon className="size-4" />
+              <div className="flex items-center gap-2 bg-muted px-3 py-2 rounded-lg border shadow-sm max-w-[200px] min-w-0">
+                <PaperclipIcon className="h-4 w-4 text-gray-500" />
+                <p className="text-sm max-w-[150px] truncate">
+                  <a
+                    href={url}
+                    download={filename}
+                    className=" hover:underline break-all"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {filename}
+                  </a><br />
+                  <span className="text-xs text-gray-500">{mediaType || "file"}</span>
+                </p>
               </div>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{attachmentLabel}</p>
+              <p>{filename}</p>
             </TooltipContent>
           </Tooltip>
           {onRemove && (
@@ -403,7 +418,7 @@ export function MessageAttachment({
               <span className="sr-only">Remove</span>
             </Button>
           )}
-        </>
+        </div>
       )}
     </div>
   );
@@ -423,7 +438,7 @@ export function MessageAttachments({
   return (
     <div
       className={cn(
-        "ml-auto flex w-fit flex-wrap items-start gap-2",
+        "ml-auto flex w-fit flex-wrap gap-2 ",
         className
       )}
       {...props}
