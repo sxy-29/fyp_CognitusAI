@@ -68,7 +68,7 @@ Simple Table:
   // status: pending to be used for the streaming
   // sendMessage: function to send message (api call)
   const { messages, setMessages, status, sendMessage } = useChat({
-    // messages: initialMessages,
+    messages: initialMessages,
     // transport: new DefaultChatTransport({
     //   api: '/api/ai/chat'
     // }),

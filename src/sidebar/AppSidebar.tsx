@@ -12,11 +12,11 @@ import {
     SidebarRail,
     SidebarTrigger,
     useSidebar,
-} from "./components/ui/sidebar";
+} from "../components/ui/sidebar";
 import { MessageSquare, BookOpen, Folder, Link as LinkIcon, SquarePen } from "lucide-react";
 import { cn } from "@/lib/utils";
-import NavUser from "./sidebar/NavUser";
-import CollapsibleChat from "./sidebar/CollapsibleChat";
+import NavUser from "./NavUser";
+import CollapsibleChat from "./CollapsibleChat";
 
 function AppSidebar() {
     const location = useLocation();
@@ -40,11 +40,11 @@ function AppSidebar() {
                 }
             ]
         },
-        {
-            title: "Notebooks",
-            icon: BookOpen,
-            url: "/notebooks",
-        },
+        // {
+        //     title: "Notebooks",
+        //     icon: BookOpen,
+        //     url: "/notebooks",
+        // },
         {
             title: "Files",
             icon: Folder,
@@ -60,7 +60,7 @@ function AppSidebar() {
     return (
         <Sidebar collapsible="icon">
             <SidebarHeader>
-                <div className={cn("flex justify-between items-center w-full pb-3", expanded ? "px-2" : "justify-center")}>
+                <div className={cn("flex justify-between items-center w-full pb-4", expanded ? "px-2" : "justify-center")}>
                     {expanded && (
                         <h1 className="leading-none text-2xl font-bold text-blue-600 text-nowrap">
                             Cognitus AI
@@ -73,7 +73,7 @@ function AppSidebar() {
                     <SidebarMenuItem>
                         <SidebarMenuButton
                             asChild
-                            className={expanded ? "border border-gray-300 rounded-lg bg-white shadow hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors" : ""}
+                            className={expanded ? "border-2 border-gray-300 rounded-lg bg-white shadow hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors" : ""}
                             tooltip="New Chat"
                         >
                             <Link to="/">
@@ -114,7 +114,7 @@ function AppSidebar() {
                 </SidebarGroup>
             </SidebarContent>
 
-            <SidebarFooter className="border-t">
+            <SidebarFooter className={cn("border-t", expanded ? "px-2" : "justify-center")}>
                 <NavUser name="Name" email="abcdefg123@gmail.com.my" />
             </SidebarFooter>
 

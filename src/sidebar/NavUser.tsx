@@ -23,7 +23,6 @@ function NavUser({ name, email }: NavUserProps) {
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
-                            size="lg"
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
                             <User2 />
                             <div className="grid flex-1 text-left text-sm leading-tight">
