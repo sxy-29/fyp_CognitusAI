@@ -3,7 +3,11 @@ import AppRoutes from './AppRoutes';
 import AppSidebar from './AppSidebar';
 import { Settings } from 'lucide-react';
 import { Button } from './components/ui/button';
-import { SidebarInset, SidebarProvider } from './components/ui/sidebar';
+import { 
+  SidebarInset, 
+  SidebarProvider, 
+  SidebarTrigger 
+} from './components/ui/sidebar';
 
 function App() {
   function settings() {
@@ -18,6 +22,8 @@ function App() {
 
         <SidebarInset>
           <header className="h-12 flex border-b px-4 items-center">
+            <SidebarTrigger className="md:hidden mr-2" />
+
             <div className="flex w-full justify-end items-center gap-2">
               <p className="font-semibold text-lg">Connected</p>
               <Button variant="ghost" onClick={settings} >

@@ -337,7 +337,7 @@ function SidebarHeader({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="sidebar-header"
       data-sidebar="header"
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn("flex flex-col gap-2 p-2 pb-0", className)}
       {...props}
     />
   )
@@ -643,7 +643,7 @@ function SidebarMenuSub({ className, ...props }: React.ComponentProps<"ul">) {
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        "border-sidebar-border mx-3.5 flex min-w-0 translate-x-px flex-col gap-1 border-l px-2.5 py-0.5",
+        "border-sidebar-border ml-3.5 mr-0.5 flex min-w-0 translate-x-px flex-col gap-1 border-l pl-2.5 pr-0.5 py-0.5",
         "group-data-[collapsible=icon]:hidden",
         className
       )}

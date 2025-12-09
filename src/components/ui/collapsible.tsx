@@ -14,6 +14,7 @@ function CollapsibleTrigger({
   return (
     <CollapsiblePrimitive.CollapsibleTrigger
       data-slot="collapsible-trigger"
+      className="group-has-data-[sidebar=menu-action]/menu-item:pr-2"
       {...props}
     />
   )

@@ -1,0 +1,15 @@
+/* md breakpoint = 768px */
+@media (max-width: 768px) {
+  .sidebar[data-state="expanded"] {
+    position: fixed;
+    z-index: 50;
+    inset: 0;
+    width: var(--sidebar-width);
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar[data-state="collapsed"] {
+    transform: translateX(-100%);
+  }
+}

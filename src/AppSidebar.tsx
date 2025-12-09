@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router";
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarHeader,
@@ -12,12 +13,15 @@ import {
     SidebarTrigger,
     useSidebar,
 } from "./components/ui/sidebar";
-import { MessageSquare, BookOpen, Folder, Link as LinkIcon } from "lucide-react";
+import { MessageSquare, BookOpen, Folder, Link as LinkIcon, SquarePen } from "lucide-react";
 import { cn } from "@/lib/utils";
+import NavUser from "./sidebar/NavUser";
+import CollapsibleChat from "./sidebar/CollapsibleChat";
 
 function AppSidebar() {
     const location = useLocation();
     const { state } = useSidebar();
+    const expanded = state === "expanded";
 
     // App Sidebar Component
     const sidebarItems = [
@@ -25,6 +29,16 @@ function AppSidebar() {
             title: "Chats",
             icon: MessageSquare,
             url: "/",
+            items: [ // replace by the actual chat history
+                {
+                    title: "Chat 1",
+                    url: "/",
+                },
+                {
+                    title: "Chat 2",
+                    url: "/",
+                }
+            ]
         },
         {
             title: "Notebooks",
@@ -43,14 +57,10 @@ function AppSidebar() {
         },
     ];
 
-    const expanded = state === "expanded";
-    
     return (
         <Sidebar collapsible="icon">
-            <SidebarHeader
-                className={cn("h-12 border-b flex items-center", expanded ? "px-4" : "p-2 justify-center")}
-            >
-                <div className="flex justify-between items-center w-full">
+            <SidebarHeader>
+                <div className={cn("flex justify-between items-center w-full pb-3", expanded ? "px-2" : "justify-center")}>
                     {expanded && (
                         <h1 className="leading-none text-2xl font-bold text-blue-600 text-nowrap">
                             Cognitus AI
@@ -58,6 +68,21 @@ function AppSidebar() {
                     )}
                     <SidebarTrigger />
                 </div>
+
+                <SidebarMenu className={expanded ? "px-2" : ""}>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            asChild
+                            className={expanded ? "border border-gray-300 rounded-lg bg-white shadow hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors" : ""}
+                            tooltip="New Chat"
+                        >
+                            <Link to="/">
+                                <SquarePen className="size-4" />
+                                <span>New Chat</span>
+                            </Link>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
             </SidebarHeader>
 
             <SidebarContent>
@@ -65,25 +90,36 @@ function AppSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu>
                             {sidebarItems.map((item) => (
-                                <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton
-                                        asChild
-                                        isActive={location.pathname === item.url}
-                                        tooltip={item.title}
-                                    >
-                                        <Link to={item.url}>
-                                            <item.icon className="size-4" />
-                                            <span>{item.title}</span>
-                                        </Link>
-                                    </SidebarMenuButton>
-                                </SidebarMenuItem>
+                                (item.title === "Chats") ? (
+                                    expanded ?
+                                        <CollapsibleChat key={item.title} item={item} location={location} />
+                                        : <></>
+                                ) : (
+                                    <SidebarMenuItem key={item.title}>
+                                        <SidebarMenuButton
+                                            asChild
+                                            isActive={location.pathname === item.url}
+                                            tooltip={item.title}
+                                        >
+                                            <Link to={item.url}>
+                                                <item.icon className="size-4" />
+                                                <span>{item.title}</span>
+                                            </Link>
+                                        </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                )
                             ))}
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
             </SidebarContent>
+
+            <SidebarFooter className="border-t">
+                <NavUser name="Name" email="abcdefg123@gmail.com.my" />
+            </SidebarFooter>
+
             <SidebarRail />
-        </Sidebar>
+        </Sidebar >
     );
 }
 
