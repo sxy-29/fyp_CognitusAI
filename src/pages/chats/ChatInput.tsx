@@ -61,14 +61,66 @@ function ChatInput({ chatMessages, setChatMessages, files }: ChatInputProps) {
 
         setChatMessages(newChatMessages);
 
-        const response = "Chatbot.getResponse(inputText)";
+        const response = "Response to: " + message.text;
         setChatMessages([
             ...newChatMessages,
             {
                 id: (chatMessages.length + 1).toString(),
                 role: 'assistant',
                 parts: [{ type: 'text', text: response }]
-            }
+            },
+            {
+      id: (chatMessages.length + 2).toString(),
+      role: 'user',
+      parts: [{
+        type: 'text',
+        text: `
+## Rules of Hooks
+1. Only call hooks at the **top level** (not inside loops, conditions, or nested functions)
+2. Only call hooks from **React functions** (components or custom hooks)
+\nWould you like to explore more advanced hooks like \`useCallback\` or \`useMemo\`?
+\nReact hooks are special functions that let you use React features in function components. The most common ones are:
+- **useState** - for managing component state
+- **useEffect** - for side effects like data fetching
+- **useContext** - for consuming context values
+- **useRef** - for accessing DOM elements
+        ` }]
+    },
+    {
+      id: (chatMessages.length + 3).toString(),
+      role: 'assistant',
+      parts: [{
+        type: 'text',
+        text: `
+\`\`\`jsx
+// Without useCallback - the function is recreated on every render
+const handleClick = () => {
+  console.log(count);
+};
+
+// With useCallback - the function is only recreated when dependencies change
+const handleClick = useCallback(() => {
+  console.log(count);
+}, [count]);
+\`\`\`
+This is example codes.\n\n
+\`\`\`python
+# Load labelled.csv and do an initial inspection
+import pandas as pd
+from tqdm import tqdm
+
+labelled_df = pd.read_csv('labelled.csv', encoding='ascii')
+print(labelled_df.head())
+print(labelled_df.describe(include='all'))
+\`\`\`
+Simple Table:
+| Header 1 | Header 2 | Header 3 | Header 3 |
+|---|---|---|---|
+| Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3 | Row 1, Col 4 |
+| Row 2, Col 1 | Row 2, Col 2 | Row 2, Col 3 | Row 2, Col 4 |
+`
+      }]
+    }
         ]);
 
         setInputText('');
