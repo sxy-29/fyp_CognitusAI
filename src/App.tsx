@@ -1,13 +1,10 @@
-import './App.css'
-import AppRoutes from './AppRoutes';
-import AppSidebar from './AppSidebar';
-import { Settings } from 'lucide-react';
-import { Button } from './components/ui/button';
-import { 
-  SidebarInset, 
-  SidebarProvider, 
-  SidebarTrigger 
-} from './components/ui/sidebar';
+import "./App.css";
+import AppRoutes from "./AppRoutes";
+import AppSidebar from "./sidebar/AppSidebar";
+import { Settings } from "lucide-react";
+import { Button } from "./components/ui/button";
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "./components/ui/sidebar";
+import "@fontsource/libre-baskerville/index.css";
 
 function App() {
   function settings() {
@@ -26,7 +23,7 @@ function App() {
 
             <div className="flex w-full justify-end items-center gap-2">
               <p className="font-semibold text-lg">Connected</p>
-              <Button variant="ghost" onClick={settings} >
+              <Button variant="ghost" onClick={settings}>
                 <Settings className="w-4 h-4" />
               </Button>
             </div>
@@ -36,10 +33,9 @@ function App() {
             <AppRoutes />
           </main>
         </SidebarInset>
-
       </div>
     </SidebarProvider>
   );
 }
 
-export default App
+export default App;

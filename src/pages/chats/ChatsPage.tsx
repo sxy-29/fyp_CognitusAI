@@ -1,22 +1,23 @@
 "use client";
 
-import { useLocation } from 'react-router';
-import { useChat } from '@ai-sdk/react';
+import { useLocation } from "react-router";
+import { useChat } from "@ai-sdk/react";
 import { DefaultChatTransport, type UIMessage } from "ai";
-import { Conversation } from '@/components/ai-elements/conversation';
-import { PromptInputProvider } from '@/components/ai-elements/prompt-input';
-import { useState } from 'react';
-import ChatMessages from './ChatMessages';
-import ChatInput from './ChatInput';
+import { Conversation } from "@/components/ai-elements/conversation";
+import { PromptInputProvider } from "@/components/ai-elements/prompt-input";
+import { useState } from "react";
+import ChatMessages from "./ChatMessages";
+import ChatInput from "./ChatInput";
 
 function ChatsPage() {
   const initialMessages: UIMessage[] = [
     {
-      id: '1',
-      role: 'user',
-      parts: [{
-        type: 'text',
-        text: `
+      id: "1",
+      role: "user",
+      parts: [
+        {
+          type: "text",
+          text: `
 ## Rules of Hooks
 1. Only call hooks at the **top level** (not inside loops, conditions, or nested functions)
 2. Only call hooks from **React functions** (components or custom hooks)
@@ -26,14 +27,17 @@ function ChatsPage() {
 - **useEffect** - for side effects like data fetching
 - **useContext** - for consuming context values
 - **useRef** - for accessing DOM elements
-        ` }]
+        `,
+        },
+      ],
     },
     {
-      id: '2',
-      role: 'assistant',
-      parts: [{
-        type: 'text',
-        text: `
+      id: "2",
+      role: "assistant",
+      parts: [
+        {
+          type: "text",
+          text: `
 \`\`\`jsx
 // Without useCallback - the function is recreated on every render
 const handleClick = () => {
@@ -60,9 +64,10 @@ Simple Table:
 |---|---|---|---|
 | Row 1, Col 1 | Row 1, Col 2 | Row 1, Col 3 | Row 1, Col 4 |
 | Row 2, Col 1 | Row 2, Col 2 | Row 2, Col 3 | Row 2, Col 4 |
-`
-      }]
-    }
+`,
+        },
+      ],
+    },
   ];
 
   // status: pending to be used for the streaming
@@ -81,28 +86,31 @@ Simple Table:
 
   return (
     <div className="flex flex-col h-full">
-      {messages.length > 0 ?
-        (
-          <>
-            <Conversation>
-              <ChatMessages chatMessages={messages} />
-            </Conversation>
-          </>
-        ) : (
-          <div className="flex-1 flex items-center justify-center">
-            <div className="w-full max-w-4xl text-center px-8">
-              <h2 className="text-4xl font-bold text-text-title-light">
-                What insights would you like to explore today?
-              </h2>
+      {messages.length > 0 ? (
+        <>
+          <Conversation>
+            <ChatMessages chatMessages={messages} />
+          </Conversation>
+        </>
+      ) : (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="w-full max-w-4xl text-center px-8 -mt-[10vh]">
+            <h2 className="text-4xl font-semibold font-serif text-text-title-light">
+              What would you like to explore today?
+            </h2>
 
-              <div className='mt-4'>
-                <PromptInputProvider>
-                  <ChatInput chatMessages={messages} setChatMessages={setMessages} files={fileState} />
-                </PromptInputProvider>
-              </div>
+            <div className="mt-10">
+              <PromptInputProvider>
+                <ChatInput
+                  chatMessages={messages}
+                  setChatMessages={setMessages}
+                  files={fileState}
+                />
+              </PromptInputProvider>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
       {messages.length > 0 && (
         <PromptInputProvider>

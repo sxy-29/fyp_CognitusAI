@@ -13,7 +13,7 @@ type UploadedFile = {
   id: string;
   file: File;
   uploadedAt: Date;
-}
+};
 
 function FilesPage() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
@@ -27,10 +27,12 @@ function FilesPage() {
     if (!newFiles) return;
 
     // check whether the redundant files name exists & pop up alert dialog if redundant
-    const existingFileNames = new Set(files.map(f => f.file.name));
+    const existingFileNames = new Set(files.map((f) => f.file.name));
     for (let i = 0; i < newFiles.length; i++) {
       if (existingFileNames.has(newFiles[i].name)) {
-        alert(`File "${newFiles[i].name}" already exists. Please rename the file before uploading.`);
+        alert(
+          `File "${newFiles[i].name}" already exists. Please rename the file before uploading.`
+        );
         return;
       }
     }
@@ -82,8 +84,8 @@ function FilesPage() {
 
     const remaining = files.filter((f) => !idsToDelete.includes(f.id));
 
-    setFiles(remaining);              // remove from state
-    setSelected({});                 // clear selection
+    setFiles(remaining); // remove from state
+    setSelected({}); // clear selection
   };
 
   // download selected files as zip
@@ -105,14 +107,14 @@ function FilesPage() {
   };
 
   const handleChatWithFiles = () => {
-    const selectedIds = Object.keys(selected).filter(id => selected[id]);
-    const selectedFiles = files.filter(f => selectedIds.includes(f.id));
+    const selectedIds = Object.keys(selected).filter((id) => selected[id]);
+    const selectedFiles = files.filter((f) => selectedIds.includes(f.id));
 
     // Navigate with file data stored in router state
     navigate("/", {
       state: {
         mode: "chat-with-files",
-        files: selectedFiles.map(f => f.file),
+        files: selectedFiles.map((f) => f.file),
       },
     });
   };
@@ -120,10 +122,8 @@ function FilesPage() {
   return (
     <div className="p-6 overflow-y-auto h-full">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-text-title-light">My Files</h2>
-        <p className="text-text-desc-light mt-2">
-          All files that have been uploaded to Cognitus
-        </p>
+        <h2 className="text-3xl font-semibold font-serif text-text-title-light">My Files</h2>
+        <p className="text-text-desc-light mt-2">All files that have been uploaded to Cognitus</p>
       </div>
 
       {/* ========== UPLOAD AREA ========== */}
@@ -160,15 +160,30 @@ function FilesPage() {
         </div>
 
         <div className="flex space-x-3">
-          <Button variant="outline" className="flex gap-2" onClick={downloadSelected} disabled={Object.values(selected).every(v => !v)}>
+          <Button
+            variant="outline"
+            className="flex gap-2"
+            onClick={downloadSelected}
+            disabled={Object.values(selected).every((v) => !v)}
+          >
             <Download className="w-4 h-4" /> Download
           </Button>
 
-          <Button variant="outline" className="flex gap-2" onClick={deleteSelected} disabled={Object.values(selected).every(v => !v)}>
+          <Button
+            variant="outline"
+            className="flex gap-2"
+            onClick={deleteSelected}
+            disabled={Object.values(selected).every((v) => !v)}
+          >
             <Trash className="w-4 h-4" /> Delete
           </Button>
 
-          <Button variant="outline" className="flex gap-2" onClick={handleChatWithFiles} disabled={Object.values(selected).every(v => !v)}>
+          <Button
+            variant="outline"
+            className="flex gap-2"
+            onClick={handleChatWithFiles}
+            disabled={Object.values(selected).every((v) => !v)}
+          >
             <MessagesSquare className="w-4 h-4" /> Chat with Files
           </Button>
         </div>
@@ -180,35 +195,24 @@ function FilesPage() {
           <thead className="bg-gray-50">
             <tr>
               <th className="px-6 py-3 text-sm font-medium text-text-muted-light">
-                {filteredFiles.length > 0 &&
-                  <Checkbox data-id="select-all"
-                    onCheckedChange={(v) => toggleSelectAll(!!v)}
-                  />
-                }
+                {filteredFiles.length > 0 && (
+                  <Checkbox data-id="select-all" onCheckedChange={(v) => toggleSelectAll(!!v)} />
+                )}
               </th>
-              <th className="px-6 py-3 text-sm font-medium text-text-muted-light">
-                Name
-              </th>
-              <th className="px-6 py-3 text-sm font-medium text-text-muted-light">
-                Size
-              </th>
-              <th className="px-6 py-3 text-sm font-medium text-text-muted-light">
-                Upload Date
-              </th>
+              <th className="px-6 py-3 text-sm font-medium text-text-muted-light">Name</th>
+              <th className="px-6 py-3 text-sm font-medium text-text-muted-light">Size</th>
+              <th className="px-6 py-3 text-sm font-medium text-text-muted-light">Upload Date</th>
             </tr>
           </thead>
 
           <tbody>
             {filteredFiles.length === 0 ? (
               <tr>
-                <td
-                  colSpan={4}
-                  className="px-6 py-16 text-center text-text-desc-light"
-                >
+                <td colSpan={4} className="px-6 py-16 text-center text-text-desc-light">
                   <Slash className="w-12 h-12 mx-auto mb-4 text-gray-500" />
                   <p>
-                    Hey, it looks like you haven’t uploaded any files yet.
-                    Upload some files to start chatting with them!
+                    Hey, it looks like you haven’t uploaded any files yet. Upload some files to
+                    start chatting with them!
                   </p>
                 </td>
               </tr>
@@ -216,21 +220,20 @@ function FilesPage() {
               filteredFiles.map((f) => (
                 <tr key={f.id} className="border-t">
                   <td className="px-6 py-3">
-                    <Checkbox data-id={f.id}
+                    <Checkbox
+                      data-id={f.id}
                       checked={!!selected[f.id]}
                       onCheckedChange={(v) => toggleSelect(f.id, !!v)}
                     />
                   </td>
                   <td className="px-6 py-3">{f.file.name}</td>
+                  <td className="px-6 py-3">{(f.file.size / 1024).toFixed(1)} KB</td>
                   <td className="px-6 py-3">
-                    {(f.file.size / 1024).toFixed(1)} KB
-                  </td>
-                  <td className="px-6 py-3">
-                    {f.uploadedAt.toLocaleDateString()}{" "}
-                    {f.uploadedAt.toLocaleTimeString()}
+                    {f.uploadedAt.toLocaleDateString()} {f.uploadedAt.toLocaleTimeString()}
                   </td>
                 </tr>
-              )))}
+              ))
+            )}
           </tbody>
         </table>
       </div>
