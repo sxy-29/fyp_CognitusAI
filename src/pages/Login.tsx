@@ -1,25 +1,36 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { useState } from "react";
+import api from "@/lib/api";
+import { useNavigate } from "react-router";
 
 function LoginForm() {
     const login = useAuthStore((s) => s.login);
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
-    // temp
-    const login_email = "abcdef123@gmail.com";
-    const login_password = "password123";
-
-    const onSubmit = (e: React.FormEvent) => {
+    async function onSubmit(e: React.FormEvent) {
         e.preventDefault();
 
-        if (email === login_email && password === login_password) {
-            login("dummyToken123", { id: "1", name: "User", email: email });
+        try {
+            const res = await api.post("/auth/login", {
+                email,
+                password,
+            });
+
+            login(res.data.token, res.data.user);
+
+            // redirect after login
+            navigate("/");
+        } catch (err) {
+            console.error(err);
+            setError("Invalid email or password!");
         }
     };
 
@@ -30,9 +41,13 @@ function LoginForm() {
                     <Card>
                         <CardHeader className="text-center">
                             <CardTitle className="leading-none text-2xl font-bold font-serif text-blue-600 text-nowrap">Welcome to Cognitus</CardTitle>
-                            <CardDescription>
-                                Enter provided email to login
-                            </CardDescription>
+                            {error ? (
+                                <FieldError>{error}</FieldError>
+                            ) : (
+                                <CardDescription>
+                                    Enter provided email to login
+                                </CardDescription>
+                            )}
                         </CardHeader>
                         <CardContent>
                             <form onSubmit={onSubmit}>
@@ -43,6 +58,7 @@ function LoginForm() {
                                             id="email"
                                             type="email"
                                             placeholder="m@example.com"
+                                            className={error ? "border-red-500" : ""}
                                             value={email}
                                             onChange={(e) => setEmail(e.target.value)}
                                             required
@@ -62,6 +78,7 @@ function LoginForm() {
                                             id="password"
                                             type="password"
                                             placeholder="Password"
+                                            className={error ? "border-red-500" : ""}
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                             required

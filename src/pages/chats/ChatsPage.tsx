@@ -81,7 +81,6 @@ Simple Table:
 
   // handle the files sent from FilesPage
   const location = useLocation();
-  // const fileState = location.state?.files ?? [];
   const [fileState] = useState(() => location.state?.files ?? []);
 
   return (
@@ -114,7 +113,7 @@ Simple Table:
 
       {messages.length > 0 && (
         <PromptInputProvider>
-          <ChatInput chatMessages={messages} setChatMessages={setMessages} files={fileState} />
+          <ChatInput chatMessages={messages} setChatMessages={setMessages} />
         </PromptInputProvider>
       )}
     </div>
