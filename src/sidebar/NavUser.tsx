@@ -4,19 +4,18 @@ import {
     SidebarMenuButton,
     SidebarMenuItem
 } from "@/components/ui/sidebar";
-import { 
-    DropdownMenu, 
-    DropdownMenuContent, 
-    DropdownMenuItem, 
-    DropdownMenuTrigger 
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import { useAuthStore } from "@/stores/useAuthStore";
 
-type NavUserProps = {
-    name: string;
-    email: string;
-}
+function NavUser() {
+    const logout = useAuthStore((s) => s.logout);
+    const user = useAuthStore((s) => s.user);
 
-function NavUser({ name, email }: NavUserProps) {
     return (
         <SidebarMenu>
             <SidebarMenuItem>
@@ -24,10 +23,10 @@ function NavUser({ name, email }: NavUserProps) {
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground">
-                            <User2 />
+                            <User2 className="h-8 w-8" />
                             <div className="grid flex-1 text-left text-sm leading-tight">
-                                <span className="truncate font-medium">{name}</span>
-                                <span className="truncate text-xs">{email}</span>
+                                <span className="truncate font-medium">{user?.name}</span>
+                                <span className="truncate text-xs">{user?.email}</span>
                             </div>
                             <ChevronUp className="ml-auto size-4" />
                         </SidebarMenuButton>
@@ -39,8 +38,10 @@ function NavUser({ name, email }: NavUserProps) {
                         sideOffset={4}
                     >
                         <DropdownMenuItem>
-                            <LogOut />  {/* logout function */}
-                            Log Out
+                            <SidebarMenuButton onClick={logout} >
+                                <LogOut />
+                                <span>Log Out</span>
+                            </SidebarMenuButton>
                         </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>

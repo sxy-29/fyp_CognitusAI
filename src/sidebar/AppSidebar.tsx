@@ -126,8 +126,8 @@ function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className={cn("border-t", expanded ? "px-2" : "justify-center")}>
-        <NavUser name="Name" email="abcdefg123@gmail.com.my" />
+      <SidebarFooter className={cn("border-t", expanded ? "" : "justify-center")}>
+        <NavUser />
       </SidebarFooter>
 
       <SidebarRail />
